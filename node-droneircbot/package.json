@@ -1,0 +1,9 @@
+{
+  "name": "droneircbot",
+  "version": "0.0.1",
+  "dependencies": {
+    "irc": "git+https://github.com/k4bek4be/node-irc.git",
+    "mysql": "^2.16.0",
+    "xml2js": "^0.4.19"
+  }
+}

@@ -1,0 +1,26 @@
+{
+	"nick": "dronebot",
+	"server": "irc.example.com",
+	"options": {
+		"port": 6697,
+		"userName": "dronebot",
+		"realName": "DroneBL reporting bot",
+		"secure": true,
+		"certExpired": false,
+		"selfSigned": false,
+		"debug": false,
+		"sasl": true,
+		"password": "nickservpassword"
+	},
+	"operLogin": "operlogin",
+	"operPassword": "operpassword",
+	"channel": "#services",
+	"dronebl": {
+		"host": "dronebl.org",
+		"path": "/RPC2",
+		"rpckey": "asdfqwerty",
+		"staging": true
+	},
+	"hopmNicks": [ "MyHopm" ],
+	"operNicks": [ "oper1", "oper2", "bot1", "OperServ" ]
+}
