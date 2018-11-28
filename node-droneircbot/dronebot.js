@@ -47,9 +47,12 @@ var listeners = {
 				var match = hopmPattern.exec(text);
 				if(match){
 					switch(match[4]){
-						case 'HTTP': case 'HTTPPOST': var type = 9; break;
+						case 'HTTP': case 'HTTPPOST': case 'HTTPS': case 'HTTPSPOST': var type = 9; break;
 						case 'SOCKS4': case 'SOCKS5': var type = 8; break;
-						default: var type = 6; bot.say(config.channel, "DRONEBL: type "+match[4]+" is unknown to me! Reported as 6"); break;
+						case 'WINGATE': var type = 14; break;
+						case 'ROUTER': case 'DREAMBOX': var type = 15; break;
+						case 'SSH': return; // emerson@Freenode suggested ignoring these results because it only checks the sshd banner
+						default: var type = 6; bot.say(config.channel, "DRONEBL: type "+match[4]+" is unknown to me! Reporting as 6"); break;
 					}
 					dronebl.report(match[2], type, false, match[3]);
 					//bot.say(config.channel, "DRONEBL: reported ip "+match[2]);
