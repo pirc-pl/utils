@@ -221,6 +221,8 @@ var dronebl = {
 				var text = chunk.toString('utf8');
 				xml2js.parseString(text, callback);
 			});
+		}).on('error', (e) => {
+			console.error(e);
 		});
 		console.log('post_data: ', post_data);
 		request.write(post_data);
