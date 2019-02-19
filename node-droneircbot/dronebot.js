@@ -3,7 +3,6 @@ var fs = require('fs');
 var https = require('https');
 var xml2js = require('xml2js');
 
-var fs = require('fs');
 var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
 var hopmPattern = /^(?:(CHECK) -> )?OPEN PROXY(?: -> [^ ]+)? ([0-9a-fA-F.:]+):([0-9]{2,5}) \(([^)]+)\) \[([^\]]+)\]$/;
@@ -62,7 +61,7 @@ var listeners = {
 				if(!commandstr) return;
 				command = commandstr.split(' ');
 				switch(command[0]){
-					default: case "help": bot.notice(nick, "Available commands: 'help', 'listtypes', 'report [ip] [type] [comment] [port]' (comment or port=false for none; use _ as space in commend), 'check [ip]', 'remove [id]' (id obtained with check), 'rehash'"); break;
+					default: case "help": bot.notice(nick, "Available commands: 'help', 'listtypes', 'report [ip] [type] [comment] [port]' (comment or port=false for none; use _ as space in comment), 'check [ip]', 'remove [id]' (id obtained with check), 'rehash', 'update [id] [newcomment]'"); break;
 					case "listtypes":
 						if(!dronebl.types){
 							bot.notice(nick, "Type data not available");
@@ -96,6 +95,13 @@ var listeners = {
 							break;
 						}
 						dronebl.remove(command[1]);
+						break;
+					case "update":
+						if(command.length != 3){
+							bot.notice(nick, "Usage: update [id] [comment]");
+							break;
+						}
+						dronebl.update(command[1], command[2].replace(/_/g, ' '));
 						break;
 					case "rehash": config = JSON.parse(fs.readFileSync('config.json', 'utf8')); break;
 				}
@@ -173,6 +179,26 @@ var dronebl = {
 				}
 			} catch(e){
 				console.log("Remove exception: ", e);
+			}
+		});
+	},
+	'update': function(id, comment){
+		var post_data = '<update id="' + id + '" comment="' + comment + '" />';
+		dronebl.access(post_data, function(err, result){
+			try {
+				if(err) throw err;
+				if(result.response.warning !== undefined){
+					for(var i=0; i<result.response.warning.length; i++){
+							bot.say(config.channel, 'id ' + result.response.warning[i].$.id + ': WARNING: ' + result.response.warning[i].$.data);
+					}
+				}
+				if(result.response.success !== undefined){
+					for(var i=0; i<result.response.success.length; i++){
+							bot.say(config.channel, 'id ' + result.response.success[i].$.id + ': SUCCESS: ' + result.response.success[i].$.data);
+					}
+				}
+			} catch(e){
+				console.log("Update exception: ", e);
 			}
 		});
 	},
